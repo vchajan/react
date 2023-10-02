@@ -1,0 +1,59 @@
+import React, { useState, useEffect, useContext, createContext } from 'react';
+
+// 1. useState
+function Counter() {
+    const [count, setCount] = useState(0);
+
+    return (
+        <div>
+            <p>Počet kliknutí: {count}</p>
+            <button onClick={() => setCount(count + 1)}>
+                Kliknite ma
+            </button>
+        </div>
+    );
+}
+
+// 2. useEffect
+function UserInfo({ userId }) {
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
+            .then(response => response.json())
+            .then(data => setData(data))
+            .catch(error => console.error("There was an error fetching data", error));
+
+        return () => {
+            // Cleanup, if necessary
+        };
+    }, [userId]);
+
+    return (
+        <div>
+            {data ? <div>Meno: {data.name}</div> : 'Načítavam...'}
+        </div>
+    );
+}
+
+// 3. useContext
+const ThemeContext = createContext('light');
+
+function ThemedButton() {
+    const theme = useContext(ThemeContext);
+    return <button style={{ background: theme === 'light' ? '#eee' : '#000' }}>Tlačidlo s témou</button>;
+}
+
+function App() {
+    return (
+        <div>
+            <Counter />
+            <UserInfo userId={1} />
+            <ThemeContext.Provider value="dark">
+                <ThemedButton />
+            </ThemeContext.Provider>
+        </div>
+    );
+}
+
+export default App;
