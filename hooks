@@ -1,33 +1,31 @@
-import React, { useState, useEffect, useContext, createContext } from 'react';
+import React, { useState, useEffect, useContext, useRef, createContext } from 'react';
 
-// 1. useState
-function Counter() {
-    const [count, setCount] = useState(0);
+// useState
+function Pocitadlo() {
+    const [pocet, setPocet] = useState(0);
 
     return (
         <div>
-            <p>Počet kliknutí: {count}</p>
-            <button onClick={() => setCount(count + 1)}>
-                Kliknite ma
-            </button>
+            <p>Počet kliknutí: {pocet}</p>
+            <button onClick={() => setPocet(pocet + 1)}>Kliknite ma</button>
         </div>
     );
 }
 
-// 2. useEffect
-function UserInfo({ userId }) {
+// useEffect
+function InformacieOUzivatelovi({ uzivatelId }) {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
+        fetch(`https://jsonplaceholder.typicode.com/users/${uzivatelId}`)
             .then(response => response.json())
             .then(data => setData(data))
-            .catch(error => console.error("There was an error fetching data", error));
+            .catch(error => console.error("Došlo k chybe pri načítaní dát", error));
 
         return () => {
-            // Cleanup, if necessary
+            // Potrebné čistenie (ak je potrebné)
         };
-    }, [userId]);
+    }, [uzivatelId]);
 
     return (
         <div>
@@ -36,22 +34,39 @@ function UserInfo({ userId }) {
     );
 }
 
-// 3. useContext
-const ThemeContext = createContext('light');
+// useContext & Context API
+const TémaKontext = createContext('svetlo');
 
-function ThemedButton() {
-    const theme = useContext(ThemeContext);
-    return <button style={{ background: theme === 'light' ? '#eee' : '#000' }}>Tlačidlo s témou</button>;
+function TlačidloSTémou() {
+    const tema = useContext(TémaKontext);
+    return <button style={{ background: tema === 'svetlo' ? '#eee' : '#000' }}>Tlačidlo s témou</button>;
+}
+
+// useRef
+function VstupRef() {
+    const vstupEl = useRef(null);
+
+    const naFokus = () => {
+        vstupEl.current.focus();
+    };
+
+    return (
+        <div>
+            <input ref={vstupEl} type="text" />
+            <button onClick={naFokus}>Zameriť sa na vstup</button>
+        </div>
+    );
 }
 
 function App() {
     return (
         <div>
-            <Counter />
-            <UserInfo userId={1} />
-            <ThemeContext.Provider value="dark">
-                <ThemedButton />
-            </ThemeContext.Provider>
+            <Pocitadlo />
+            <InformacieOUzivatelovi uzivatelId={1} />
+            <TémaKontext.Provider value="tmavé">
+                <TlačidloSTémou />
+            </TémaKontext.Provider>
+            <VstupRef />
         </div>
     );
 }
