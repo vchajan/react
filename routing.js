@@ -2,8 +2,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from "./Login";
 import Result from "./Result";
 import Show from "./Show";
-function App() {
-  return (
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
     <React.StrictMode>
       <BrowserRouter>
         <Routes>
@@ -14,6 +14,5 @@ function App() {
       </BrowserRouter>
    </React.StrictMode>
   );
-}
-
-export default App;
+);
+reportWebVitals();
