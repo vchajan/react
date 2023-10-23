@@ -7,7 +7,7 @@ export const UserProvider = ({ children }) => {
    const [selectedUser, setSelectedUser] = useState(null);
    const [error, setError] = useState(null);
 
-   // Function to fetch user data from an API
+   // Funkcia na načítanie údajov o užívateľoch z API
    const fetchUsers = async () => {
       try {
          let response = await fetch(
@@ -16,7 +16,7 @@ export const UserProvider = ({ children }) => {
          let data = await response.json();
          setUsers(data);
       } catch (error) {
-         setError("Failed to fetch users");
+         setError("Načítanie užívateľov zlyhalo");
       }
    };
 
