@@ -1,67 +1,67 @@
 import React, { useState, useContext, useRef } from "react";
 import { UserContext } from "./UserContext";
 
-const UserDetail = () => {
-   const { selectedUser, setSelectedUser } = useContext(UserContext);
-   const [status, setStatus] = useState("");
-   const nameInputRef = useRef();
+const DetailUzivatela = () => {
+   const { vybranyUzivatel, setVybranyUzivatel } = useContext(UserContext);
+   const [stav, setStav] = useState("");
+   const refMenoInput = useRef();
 
-   const saveDetails = async () => {
-      if (!selectedUser) return;
+   const ulozitDetaily = async () => {
+      if (!vybranyUzivatel) return;
 
-      // Simulating a save action with a HTTP PATCH request
-      setStatus("Saving...");
-      const updatedUser = {
-         ...selectedUser,
-         name: nameInputRef.current.value,
+      // Simulácia akcie uloženia s HTTP PATCH požiadavkou
+      setStav("Ukladám...");
+      const aktualizovanyUzivatel = {
+         ...vybranyUzivatel,
+         name: refMenoInput.current.value,
       };
 
       try {
-         // Since we're using a placeholder API that doesn't support actual updates,
-         // this is just a simulation. Replace the URL with your actual API's URL.
-         const response = await fetch(
-            `https://jsonplaceholder.typicode.com/users/${selectedUser.id}`,
+         // Keďže používame zástupnú API, ktorá nepodporuje skutočné aktualizácie,
+         // je toto len simulácia. Nahradiť URL vašou skutočnou API adresou.
+         const odpoved = await fetch(
+            `https://jsonplaceholder.typicode.com/users/${vybranyUzivatel.id}`,
             {
-               method: "PATCH", // The method could also be 'PUT' depending on your API.
+               method: "PATCH", // Metóda by mohla byť tiež 'PUT' v závislosti od vašej API.
                headers: {
-                  "Content-type": "application/json; charset=UTF-8", // Indicates the content
+                  "Content-type": "application/json; charset=UTF-8", // Určuje obsah
                },
-               body: JSON.stringify(updatedUser),
+               body: JSON.stringify(aktualizovanyUzivatel),
             }
          );
 
-         if (!response.ok) {
-            throw new Error("Could not save the data.");
+         if (!odpoved.ok) {
+            throw new Error("Nepodarilo sa uložiť dáta.");
          }
 
-         // We update the selected user in our context after a successful 'save'.
-         setSelectedUser(updatedUser);
-         setStatus("Saved successfully!");
-      } catch (error) {
-         setStatus("Failed to save!");
+         // Po úspešnom 'uložení' aktualizujeme vybraného užívateľa v našom kontexte.
+         setVybranyUzivatel(aktualizovanyUzivatel);
+         setStav("Úspešne uložené!");
+      } catch (chyba) {
+         setStav("Uloženie zlyhalo!");
       }
    };
 
-   if (!selectedUser) return <div>No user selected</div>;
+   if (!vybranyUzivatel) return <div>Žiadny vybraný užívateľ</div>;
 
    return (
       <div>
-         <h2>User Details</h2>
-         <p>Name: {selectedUser.name}</p>
-         <p>Email: {selectedUser.email}</p>
-         {/* Form for editing details */}
+         <h2>Detaily užívateľa</h2>
+         <p>Meno: {vybranyUzivatel.name}</p>
+         <p>Email: {vybranyUzivatel.email}</p>
+         {/* Formulár pre úpravu detailov */}
          <div>
             <input
-               defaultValue={selectedUser.name}
-               ref={nameInputRef}
+               defaultValue={vybranyUzivatel.name}
+               ref={refMenoInput}
                type="text"
             />
-            <button onClick={saveDetails}>Save</button>
+            <button onClick={ulozitDetaily}>Uložiť</button>
          </div>
-         {/* Display status */}
-         {status && <p>{status}</p>}
+         {/* Zobrazenie stavu */}
+         {stav && <p>{stav}</p>}
       </div>
    );
 };
 
-export default UserDetail;
+export default DetailUzivatela;
