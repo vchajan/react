@@ -1,17 +1,29 @@
-import React from "react";
-import { UserProvider } from "./UserContext";
-import UserList from "./UserList";
-import UserDetail from "./UserDetail";
+import {
+   BrowserRouter as Router,
+   Routes,
+   Route,
+   useParams,
+} from "react-router-dom";
 
 function App() {
    return (
-      <UserProvider>
-         <div className="App">
-            <UserList />
-            <UserDetail />
-         </div>
-      </UserProvider>
+      <Router>
+         <Routes>
+            <Route path="/users/:userId" element={<UserPage />} />
+            <Route path="/products/:productId" element={<ProductPage />} />
+         </Routes>
+      </Router>
    );
+}
+
+function UserPage() {
+   let { userId } = useParams();
+   return <div>User ID: {userId}</div>;
+}
+
+function ProductPage() {
+   let { productId } = useParams();
+   return <div>Product ID: {productId}</div>;
 }
 
 export default App;
